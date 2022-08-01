@@ -60,8 +60,8 @@ return response()-> json([
         if (! $token = auth()->claims(['nam'=> 'Evren'])->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized a'], 401);
         }
-
-        return $this->respondWithToken(['token' => $token,  'payloads' => auth()->payload()]);
+        
+        return $this->respondWithToken(['token' => $token,  auth()->user()]);
     }
  
     /**
