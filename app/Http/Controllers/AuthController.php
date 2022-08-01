@@ -63,7 +63,7 @@ return response()-> json([
 
         return $this->respondWithToken(['token' => $token,  'payloads' => auth()->payload()]);
     }
-
+ 
     /**
      * Get the authenticated User.
      *
