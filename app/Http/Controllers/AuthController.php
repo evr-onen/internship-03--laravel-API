@@ -33,7 +33,9 @@ class AuthController extends Controller
         $validator= validator()->make(request()->all(),[
             'name'      => 'required | string',
             'email'     => 'required | email',
-            'password'  => 'required | string | min:6'
+            'password'  => 'required | string | min:6',
+            'password_confirmation' => 'required_with:password|same:password|min:6',
+
         ]);
 
         if($validator->fails()){
@@ -44,7 +46,10 @@ class AuthController extends Controller
         $user = User::create([
             'name'      => request()-> get('name'),
             'email'     => request()-> get('email'),
-            'password'  => bcrypt( request()-> get('password'))
+            'password'  => bcrypt( request()-> get('password')),
+            'email'     => request()-> get('email'),
+            'user_spec' => !empty(request()->get('user_spec'))?request()->get('user_spec'):"3" ,
+            'store_id'  => !empty(request()->get('store_id'))?request()->get('store_id'):"0",
         ]);
 return response()-> json([
     'message'   => 'User Created',
