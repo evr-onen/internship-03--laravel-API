@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
-
+// use Illuminate\Support\Facades\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 
@@ -28,16 +28,17 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function register()
+    public function register(Request $request)
     {
+        
         $validator= validator()->make(request()->all(),[
             'name'      => 'required | string',
             'email'     => 'required | email',
-            'password'  => 'required | string | min:6',
-            'password_confirmation' => 'required_with:password|same:password|min:6',
+            'password'              => 'required | string | min:6 | confirmed',
+            
 
         ]);
-
+        
         if($validator->fails()){
             return response()-> json([
                 'message'   => request()-> get('name'). ' '. request()-> get('email'). ' ' . request()-> get('password')
@@ -51,18 +52,15 @@ class AuthController extends Controller
             'user_spec' => !empty(request()->get('user_spec'))?request()->get('user_spec'):"3" ,
             'store_id'  => !empty(request()->get('store_id'))?request()->get('store_id'):"0",
         ]);
-return response()-> json([
-    'message'   => 'User Created',
-    'user'      => $user
-]);
+            return   $user;
 }
 
 
     public function login()
     {
         $credentials = request(['email', 'password']);
-        
-        if (! $token = auth()->claims(['nam'=> 'Evren'])->attempt($credentials)) {
+        /* claims(['nam'=> 'Evren'])-> */
+        if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized a'], 401);
         }
         
