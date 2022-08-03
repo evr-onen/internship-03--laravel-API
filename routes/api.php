@@ -36,3 +36,18 @@ Route::group([
     
 
 });
+
+Route::group([
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'api',
+    'prefix' => 'category'
+
+], function ($router) {
+
+    Route::post('/', 'CategoryController@create_category');
+    Route::get('/categories', 'CategoryController@getscategories');
+    Route::put('/{id}', 'CategoryController@update_category');
+    Route::delete('/{id}', 'CategoryController@destroy_category');
+    
+
+});
