@@ -32,7 +32,7 @@ class CategoryController extends Controller
      
         $cat = Category::create([
             'name'           => request()-> get('name'),
-            'main_id'        => request()-> get('email'),
+            'main_id'        => request()-> get('main_id'),
         ]);
            
         return $cat->save();
@@ -49,7 +49,7 @@ class CategoryController extends Controller
      */
     public function getscategories(Category $category)
     {
-        //
+        return Category::all();
     }
 
     
