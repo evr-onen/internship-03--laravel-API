@@ -1,5 +1,7 @@
 <?php
+
 namespace App;
+
 namespace App\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -66,4 +68,10 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function storeToUser()
+    {
+        // $this->hasOne(Main::class, 'id', 'main_id');
+        return $this->hasOne(Store::class, 'store_id', 'id');
+    }
 }

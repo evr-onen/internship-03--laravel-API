@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 
@@ -20,7 +21,6 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
-
 });
 Route::group([
     'namespace' => 'App\Http\Controllers',
@@ -33,8 +33,6 @@ Route::group([
     Route::post('edit', 'ProductsController@update_product');
     Route::get('get/{stokkod}', 'ProductsController@get_product');
     Route::get('/', 'ProductsController@get_products');
-    
-
 });
 
 Route::group([
@@ -48,6 +46,18 @@ Route::group([
     Route::get('/categories', 'CategoryController@getscategories');
     Route::put('/{id}', 'CategoryController@update_category');
     Route::delete('/{id}', 'CategoryController@destroy_category');
-    
+});
 
+Route::group([
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'api',
+    'prefix' => 'store'
+
+], function ($router) {
+
+    Route::post('/', 'StoreController@create_store');
+    Route::get('/', 'StoreController@getsstores');
+    Route::get('/pending', 'StoreController@gets_pending_stores');
+    Route::put('/{id}', 'StoreController@update_store');
+    Route::delete('/{id}', 'StoreController@destroy_store');
 });
