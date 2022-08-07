@@ -52,13 +52,13 @@ class StoreController extends Controller
      */
     public function getsstores()
     {
-        return Store::all();
+        return Store::with('storeToUser')->get();
     }
     public function gets_pending_stores()
     {
-
+        // ->where('status', '1')
         // products= Product::with('productToSub.subToMain')->get();
-        $stores =  Store::with('storeToUser')->where('status', '1')->get();
+        $stores =  Store::with('storeToUser')->get();
         return $stores;
     }
 
@@ -97,6 +97,20 @@ class StoreController extends Controller
         return $getStore->save();
     }
 
+
+    public function accept_store(Request $request, $id)
+    {
+
+        $getStore = Store::where('id', $id)->first();
+
+        $getStore->status     = 2;
+        $getStore->save();
+        $theUser = User::whereId($request->user_id)->first();
+
+        $theUser->user_spec   = 1;
+        $theUser->save();
+        return $theUser;
+    }
     /**
      * Remove the specified resource from storage.
      *

@@ -57,7 +57,7 @@ Route::group([
 
     Route::post('/', 'StoreController@create_store');
     Route::get('/', 'StoreController@getsstores');
-    Route::get('/pending', 'StoreController@gets_pending_stores');
+    Route::post('/pending/{id}', 'StoreController@accept_store');
     Route::put('/{id}', 'StoreController@update_store');
     Route::delete('/{id}', 'StoreController@destroy_store');
 });
