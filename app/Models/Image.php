@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'path',
+        'image_for',
+        'imagetable_type',
+        'imagetable_id',
+        'status',
+    ];
     public function imagetable()
     {
 
