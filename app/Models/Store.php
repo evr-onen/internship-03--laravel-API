@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Image;
 
 class Store extends Model
 {
@@ -22,5 +23,11 @@ class Store extends Model
     {
         // $this->hasOne(Main::class, 'id', 'main_id');
         return $this->hasOne(User::class, 'store_id', 'id');
+    }
+
+    public function images()
+    {
+
+        return $this->morphMany(Image::class, 'imagetable');
     }
 }

@@ -60,4 +60,5 @@ Route::group([
     Route::post('/pending/{id}', 'StoreController@accept_store');
     Route::put('/{id}', 'StoreController@update_store');
     Route::delete('/{id}', 'StoreController@destroy_store');
+    Route::get('/images/{id}', 'StoreController@get_images');
 });

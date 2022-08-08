@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -62,7 +63,12 @@ class StoreController extends Controller
         return $stores;
     }
 
+    public function get_images($id)
+    {
+        $stores = Store::find($id)->load('images');
 
+        return ($stores);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -105,10 +111,10 @@ class StoreController extends Controller
 
         $getStore->status     = 2;
         $getStore->save();
-        $theUser = User::whereId($request->user_id)->first();
+        $theUser = User::whereId($request->user_id)->update(['user_spec' => 1]);
 
-        $theUser->user_spec   = 1;
-        $theUser->save();
+        // $theUser->user_spec   = 1;
+        // $theUser->save();
         return $theUser;
     }
     /**
@@ -120,6 +126,7 @@ class StoreController extends Controller
     public function destroy_store($id)
     {
         $delete_cat = Store::where('id', $id)->delete();
+        User::where('store_id', $id)->update(['store_id' => 0]);
         return $delete_cat;
     }
 }
