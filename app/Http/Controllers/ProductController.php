@@ -14,10 +14,10 @@ class ProductController extends Controller
      *
      * @return void
      */
-    /* public function __construct()
+    public function __construct()
     {
         $this->middleware('auth:api');
-    } */
+    }
 
 
 
@@ -39,7 +39,7 @@ class ProductController extends Controller
     public function create(Request $request)
     {
 
-        return $request->name;
+
         $request->all();
 
         $request->validate([
@@ -134,9 +134,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function get_products()
     {
-        //
+        return Product::all()->load('images', 'category');
     }
 
     /**
@@ -157,7 +157,7 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update_product(Request $request, Product $product)
     {
         //
     }
