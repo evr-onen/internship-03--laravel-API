@@ -38,6 +38,8 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
+
+        return $request->name;
         $request->all();
 
         $request->validate([
@@ -61,14 +63,13 @@ class ProductController extends Controller
 
             $img = new Image();
             $img->path = "/uploads/product_images/" . $new_name;
-            $img->image_for = "product";
+            $img->image_for = "main";
             $img->imagetable_type = "App\Models\Product";
-            $img->imagetable_type = $product->id;
+            $img->imagetable_id = $product->id;
 
 
 
             $img->save();
-            return response()->json($product);
         } else {
             $product->save();
             return response()->json('photo yok');
@@ -83,12 +84,11 @@ class ProductController extends Controller
             $img->path = "/uploads/product_images/" . $new_name;
             $img->image_for = "product";
             $img->imagetable_type = "App\Models\Product";
-            $img->imagetable_type = $product->id;
+            $img->imagetable_id = $product->id;
 
 
 
             $img->save();
-            return response()->json($product);
         } else {
             $product->save();
             return response()->json('photo yok');
@@ -103,7 +103,7 @@ class ProductController extends Controller
             $img->path = "/uploads/product_images/" . $new_name;
             $img->image_for = "product";
             $img->imagetable_type = "App\Models\Product";
-            $img->imagetable_type = $product->id;
+            $img->imagetable_id = $product->id;
 
 
 
