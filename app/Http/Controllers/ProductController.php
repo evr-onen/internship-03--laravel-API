@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Image;
@@ -244,14 +245,18 @@ class ProductController extends Controller
      */
     public function destroy_products($id)
     {
-        Product::find($id)->delete();
+
         $images = Product::find($id)->load('images');
 
         foreach ($images->images as $image) {
+
+            if (file_exists($image->path)) {
+
+                @unlink($image->path);
+            }
             $image->delete();
-            unlink($image->path);
         }
 
-        dd($images->images);
+        return  Product::find($id)->delete();
     }
 }
