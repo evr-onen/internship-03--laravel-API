@@ -61,6 +61,7 @@ Route::group([
     Route::put('/{id}', 'StoreController@update_store');
     Route::delete('/{id}', 'StoreController@destroy_store');
     Route::get('/images/{id}', 'StoreController@get_images');
+    Route::get('/{id}', 'StoreController@getsstore');
 });
 Route::group([
     'namespace' => 'App\Http\Controllers',

@@ -16,6 +16,7 @@ class StoreController extends Controller
      */
     public function create_store(Request $request)
     {
+
         $validator = validator()->make(request()->all(), [
             'name'      => 'required | string | ',
             'email'     => 'required | email | ',
@@ -36,13 +37,51 @@ class StoreController extends Controller
         $store->save();
 
         $user = User::find(request()->user_id)->update(['store_id' => $store->id]);
+
+        $image = $request->file('banner');
+        if ($request->hasFile('banner')) {
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('/uploads/product_images'), $new_name);
+
+            $img = new Image();
+            $img->path = "/uploads/product_images/" . $new_name;
+            $img->image_for = "store";
+            $img->imagetable_type = "App\Models\Store";
+            $img->imagetable_id = $store->id;
+
+
+
+            $img->save();
+        }
+
+        $image = $request->file('brand');
+        if ($request->hasFile('brand')) {
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('/uploads/product_images'), $new_name);
+
+            $img = new Image();
+            $img->path = "/uploads/product_images/" . $new_name;
+            $img->image_for = "Brand";
+            $img->imagetable_type = "App\Models\Store";
+            $img->imagetable_id = $store->id;
+
+
+
+            $img->save();
+        }
+
+
         return $user;
         /* $user->user_spec = 3;
         $user->store_id =  $store->id;
         $user->save(); */
     }
 
-
+    public function getsstore($id)
+    {
+        $store = Store::with('storeToUser', 'images')->find($id);
+        return $store;
+    }
 
 
     /**

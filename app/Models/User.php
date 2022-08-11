@@ -30,8 +30,8 @@ class User extends Authenticatable implements JWTSubject
         return [
             'name'              => $this->name,
             'store_id'      => $this->store_id,
-            'user_spec'    => $this->user_spec
-
+            'user_spec'    => $this->user_spec,
+            // "siteUrl"   =>  url('/')
 
         ];
     }
