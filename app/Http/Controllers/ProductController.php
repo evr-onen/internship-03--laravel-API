@@ -246,9 +246,9 @@ class ProductController extends Controller
     public function destroy_products($id)
     {
 
-        $images = Product::find($id)->load('images');
+        $product = Product::find($id)->load('images');
 
-        foreach ($images->images as $image) {
+        foreach ($product->images as $image) {
 
             if (file_exists($image->path)) {
 
@@ -257,6 +257,6 @@ class ProductController extends Controller
             $image->delete();
         }
 
-        return  Product::find($id)->delete();
+        return  $product->delete();
     }
 }
