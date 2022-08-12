@@ -76,3 +76,16 @@ Route::group([
     Route::get('/all', 'ProductController@get_products');
     Route::delete('/{id}', 'ProductController@destroy_products');
 });
+
+Route::group([
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'api',
+    'prefix' => 'storeproduct'
+
+], function ($router) {
+
+    Route::post('/', 'StoreProductController@create');
+    Route::post('/{id}', 'StoreProductController@update_product');
+    Route::get('/all', 'StoreProductController@getstoreProducts');
+    Route::delete('/{id}', 'StoreProductController@destroy_products');
+});

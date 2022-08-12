@@ -22,10 +22,31 @@ class StoreProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $validator = validator()->make(request()->all(), [
+            'store_id'      => 'required | integer',
+            'product_id'    => 'required | string',
+            'price'         => 'required | string',
+            'stock'         => 'required | string',
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
+
+        $request->all();
+
+        $storepro = new StoreProduct();
+        $storepro->store_id    = $request->store_id;
+        $storepro->product_id  = $request->product_id;
+        $storepro->price       = $request->price;
+        $storepro->stock       = $request->stock;
+
+        return $storepro->save();
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -44,9 +65,9 @@ class StoreProductController extends Controller
      * @param  \App\Models\StoreProduct  $storeProduct
      * @return \Illuminate\Http\Response
      */
-    public function show(StoreProduct $storeProduct)
+    public function getstoreProducts(StoreProduct $storeProduct)
     {
-        //
+        return StoreProduct::with('storeToProduct.images')->get();
     }
 
     /**

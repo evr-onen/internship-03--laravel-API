@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Image;
+use App\Models\StoreProduct;
 use App\Models\Category;
 
 class Product extends Model
@@ -28,5 +30,11 @@ class Product extends Model
     {
 
         return $this->morphMany(Image::class, 'imagetable');
+    }
+
+    public function productToSore()
+    {
+
+        return $this->belongsToMany(StoreProduct::class, "id", "product_id");
     }
 }

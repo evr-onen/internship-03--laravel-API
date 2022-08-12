@@ -1,5 +1,7 @@
 <?php
+
 namespace app\Models;
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
@@ -12,14 +14,14 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-  /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'logout']]);
     }
 
     /**
@@ -30,42 +32,41 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        
-        $validator= validator()->make(request()->all(),[
+
+        $validator = validator()->make(request()->all(), [
             'name'      => 'required | string',
             'email'     => 'required | email',
             'password'              => 'required | string | min:6 | confirmed',
-            
+
 
         ]);
-        
-        if($validator->fails()){
+
+        if ($validator->fails()) {
             return response($validator->errors());
-            
         }
         $user = User::create([
-            'name'      => request()-> get('name'),
-            'email'     => request()-> get('email'),
-            'password'  => bcrypt( request()-> get('password')),
-            'email'     => request()-> get('email'),
-            'user_spec' => !empty(request()->get('user_spec'))?request()->get('user_spec'):"3" ,
-            'store_id'  => !empty(request()->get('store_id'))?request()->get('store_id'):"0",
+            'name'      => request()->get('name'),
+            'email'     => request()->get('email'),
+            'password'  => bcrypt(request()->get('password')),
+            'email'     => request()->get('email'),
+            'user_spec' => !empty(request()->get('user_spec')) ? request()->get('user_spec') : "3",
+            'store_id'  => !empty(request()->get('store_id')) ? request()->get('store_id') : "0",
         ]);
-            return   $user;
-}
+        return   $user;
+    }
 
 
     public function login()
     {
         $credentials = request(['email', 'password']);
         /* claims(['nam'=> 'Evren'])-> */
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized a'], 401);
         }
-        
+
         return $this->respondWithToken(['token' => $token,  auth()->user()]);
     }
- 
+
     /**
      * Get the authenticated User.
      *
