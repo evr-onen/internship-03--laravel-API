@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
 use App\Models\Image;
 use App\Models\Store;
 use App\Models\User;
@@ -83,7 +84,48 @@ class StoreController extends Controller
         return $store;
     }
 
+    public function updateStoreImages($id, Request $request)
+    {
 
+        $store = Store::with('images')->find($id);
+
+
+
+        $image = $request->file('banner');
+
+        if ($request->hasFile('banner')) {
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('/uploads/product_images'), $new_name);
+
+            $img = $store->images->where('image_for', 'store');
+
+            if (File::exists($img[0]->path)) File::delete(public_path($img[0]->path));
+            $img[0]->path = "/uploads/product_images/" . $new_name;
+            $img[0]->image_for = "store";
+            $img[0]->imagetable_type = "App\Models\Store";
+            $img[0]->imagetable_id = $store->id;
+
+            $store->images[0]->save();
+        }
+
+        $image = $request->file('logo');
+
+        if ($request->hasFile('logo')) {
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('/uploads/product_images'), $new_name);
+
+            $img = $store->images->where('image_for', 'brand');
+
+            if (File::exists($img[0]->path)) File::delete(public_path($img[0]->path));
+            $img[0]->path = "/uploads/product_images/" . $new_name;
+            $img[0]->image_for = "brand";
+            $img[0]->imagetable_type = "App\Models\Store";
+            $img[0]->imagetable_id = $store->id;
+
+            $store->images[0]->save();
+        }
+        return $store;
+    }
     /**
      * Display the specified resource.
      *
