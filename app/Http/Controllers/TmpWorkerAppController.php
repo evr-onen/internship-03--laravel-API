@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use App\Models\tmpWorkerApp;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+
+
+
 
 class TmpWorkerAppController extends Controller
 {
@@ -28,20 +33,49 @@ class TmpWorkerAppController extends Controller
 
         $validator = validator()->make(request()->all(), [
             'sender_id'      => 'required | integer',
-            'user_id'        => 'required | integer',
-            'status'         => 'required | integer',
+            'user_mail'        => 'required | email',
+
 
         ]);
         if ($validator->fails()) {
             return response($validator->errors());
         }
-        $createApp = new tmpWorkerApp();
-        $createApp->sender_id = $request->sender_id;
-        $createApp->sender_id = $request->user_id;
-        $createApp->sender_id = $request->status;
 
-        //$key = base64_encode(Hash::make(eee));
-        $createApp->hash = $request->rand();
+        $user = User::where('email', $request->user_mail)->get();
+
+        $createApp = new tmpWorkerApp();
+
+        $createApp->sender_id = $request->sender_id;
+
+        $createApp->user_id = $user[0]->id;
+        $createApp->status = 1;
+
+        $createApp->hash = rand();
+        $createApp->save();
+
+        $email = $request->user_mail;
+
+        $array = [
+            'hashmail' => "localhost:3000/" . $createApp->hash
+        ];
+
+        Mail::send('mail', $array, function ($message) use ($email) {
+            $message->subject('worker Application');
+            $message->to('evr.onen@gmail.com');
+        });
+
+        // Mail::send('mail.worker',  $array, function ($message) use ($email) {
+        //     $message->to($data['email'])
+        //         ->subject($data['subject']);
+        // });
+
+
+
+
+
+
+
+        return $createApp;
     }
 
     /**
@@ -63,7 +97,12 @@ class TmpWorkerAppController extends Controller
      */
     public function show(tmpWorkerApp $tmpWorkerApp, $id)
     {
-        return   tmpWorkerApp::with('User')->get();
+        return   tmpWorkerApp::where('sender_id', $id)->with('User')->get();
+    }
+
+    public function showAll(tmpWorkerApp $tmpWorkerApp, $id)
+    {
+        return   tmpWorkerApp::where('sender_id', 5)->with('User');
     }
 
     /**
@@ -95,8 +134,8 @@ class TmpWorkerAppController extends Controller
      * @param  \App\Models\tmpWorkerApp  $tmpWorkerApp
      * @return \Illuminate\Http\Response
      */
-    public function destroy(tmpWorkerApp $tmpWorkerApp)
+    public function destroy(tmpWorkerApp $tmpWorkerApp, $id)
     {
-        //
+        return tmpWorkerApp::whereId($id)->delete();
     }
 }

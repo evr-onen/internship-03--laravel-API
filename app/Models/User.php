@@ -28,10 +28,15 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
+
+        $tmp = tmpWorkerApp::where('user_id', $this->id)->get();
+
         return [
-            'name'              => $this->name,
-            'store_id'      => $this->store_id,
-            'user_spec'    => $this->user_spec,
+            'name'               => $this->name,
+            'store_id'           => $this->store_id,
+            'user_spec'          => $this->user_spec,
+            'hash'               =>  isset($tmp[0])  ? $tmp[0]->hash : "",
+            'sender_id'          =>  isset($tmp[0])  ? $tmp[0]->sender_id : "",
             // "siteUrl"   =>  url('/')
 
         ];
