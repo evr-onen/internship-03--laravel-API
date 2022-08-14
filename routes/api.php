@@ -21,6 +21,7 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+    Route::get('tmp', 'AuthController@tree');
 });
 Route::group([
     'namespace' => 'App\Http\Controllers',
@@ -85,7 +86,21 @@ Route::group([
 ], function ($router) {
 
     Route::post('/', 'StoreProductController@create');
-    Route::post('/{id}', 'StoreProductController@update_product');
+    Route::post('/{id}', 'StoreProductController@update');
     Route::get('/all', 'StoreProductController@getstoreProducts');
-    Route::delete('/{id}', 'StoreProductController@destroy_products');
+    Route::delete('/{id}', 'StoreProductController@destroy');
+});
+
+Route::group([
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'api',
+    'prefix' => 'tmp'
+
+], function ($router) {
+
+    Route::post('/', 'StoreProductController@create');
+    Route::post('/{id}', 'StoreProductController@update');
+    Route::get('/{id}', 'TmpWorkerAppController@show');
+    Route::get('/all', 'StoreProductController@getstoreProducts');
+    Route::delete('/{id}', 'StoreProductController@destroy');
 });

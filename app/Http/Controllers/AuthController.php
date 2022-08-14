@@ -4,6 +4,7 @@ namespace app\Models;
 
 namespace App\Http\Controllers;
 
+use App\Models\tmpWorkerApp;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -19,10 +20,10 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'logout']]);
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api', ['except' => ['login', 'register', 'logout']]);
+    // }
 
     /**
      * Get a JWT via given credentials.
@@ -63,9 +64,17 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized a'], 401);
         }
-
-        return $this->respondWithToken(['token' => $token,  auth()->user()]);
+        // $tm = tmpWorkerApp::find(auth()->user()->id)->with('tmp')->get();
+        $tm = User::whereId(auth()->user()->id)->with('tmp')->get();
+        return $this->respondWithToken(['token' => $token,  auth()->user(), 'tm' => $tm]);
     }
+
+    public function tree()
+    {
+
+        return User::whereId(6)->with('tmp')->get();
+    }
+
 
     /**
      * Get the authenticated User.

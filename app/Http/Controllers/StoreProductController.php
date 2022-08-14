@@ -43,7 +43,9 @@ class StoreProductController extends Controller
         $storepro->price       = $request->price;
         $storepro->stock       = $request->stock;
 
-        return $storepro->save();
+        $storepro->save();
+
+        return StoreProduct::find($storepro->id)->with('storeToProduct.images')->get();
     }
 
 
@@ -88,9 +90,30 @@ class StoreProductController extends Controller
      * @param  \App\Models\StoreProduct  $storeProduct
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StoreProduct $storeProduct)
+    public function update(Request $request, StoreProduct $storeProduct, $id)
     {
-        //
+        $validator = validator()->make(request()->all(), [
+            'store_id'      => 'required | integer',
+            'product_id'    => 'required | integer',
+            'price'         => 'required | integer',
+            'stock'         => 'required | string',
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
+
+        $request->all();
+
+        $storepro = StoreProduct::find($id);
+        $storepro->store_id    = $request->store_id;
+        $storepro->product_id  = $request->product_id;
+        $storepro->price       = $request->price;
+        $storepro->stock       = $request->stock;
+        $storepro->save();
+
+
+        return StoreProduct::where('store_id', $storepro->store_id)->with('storeToProduct.images')->get();
     }
 
     /**
@@ -99,8 +122,10 @@ class StoreProductController extends Controller
      * @param  \App\Models\StoreProduct  $storeProduct
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StoreProduct $storeProduct)
+    public function destroy(StoreProduct $storeProduct, $id)
     {
-        //
+        $item = StoreProduct::find($id)->store_id;
+        $delete = StoreProduct::find($id)->delete();
+        return StoreProduct::where('store_id', $item)->with('storeToProduct.images')->get();
     }
 }

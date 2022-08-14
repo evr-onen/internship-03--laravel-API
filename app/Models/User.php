@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\tmpWorkerApp;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -71,7 +72,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function storeToUser()
     {
-        // $this->hasOne(Main::class, 'id', 'main_id');
         return $this->hasOne(Store::class, 'store_id', 'id');
+    }
+    public function tmp()
+    {
+
+        return $this->hasOne(tmpWorkerApp::class, 'user_id', 'id');
     }
 }
