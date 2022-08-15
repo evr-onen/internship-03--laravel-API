@@ -179,63 +179,66 @@ class ProductController extends Controller
         $product->save();
 
         $image = $request->file('file1');
-        if ($request->hasFile('file1')) {
+        if ($request->fileID1 == 0) {
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('/uploads/product_images'), $new_name);
+               Image::find($request->ids_0)->delete();
 
-            $img = Image::find($request->fileID1);
+            $img1 = new Image() ;
+            $img1->path = "/uploads/product_images/" . $new_name;
+            $img1->image_for = "main";
+            $img1->imagetable_type = "App\Models\Product";
+            $img1->imagetable_id = $product->id;
 
-            $img->path = "/uploads/product_images/" . $new_name;
-            $img->image_for = "main";
-            $img->imagetable_type = "App\Models\Product";
-            $img->imagetable_id = $product->id;
+            // $request->hasFile('file3')
 
-
-
-            $img->save();
+            $img1->save();
         } else {
-            $product->save();
-            return response()->json('photo yok1');
+
+            $img1 = Image::find($request->fileID1);
+            $img1->image_for = "main";
+           $img1->save();
         }
 
         $image = $request->file('file2');
-        if ($request->hasFile('file2')) {
+        if ($request->fileID2 == 0) {
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('/uploads/product_images'), $new_name);
+          Image::find($request->ids_1)->delete();
+            $img2 = new Image() ;
+            $img2->path = "/uploads/product_images/" . $new_name;
+            $img2->image_for = "product";
+            $img2->imagetable_type = "App\Models\Product";
+            $img2->imagetable_id = $product->id;
 
-            $img = Image::find($request->fileID2);
-            $img->path = "/uploads/product_images/" . $new_name;
-            $img->image_for = "product";
-            $img->imagetable_type = "App\Models\Product";
-            $img->imagetable_id = $product->id;
 
 
-
-            $img->save();
+            $img2->save();
         } else {
-            $product->save();
-            return response()->json('photo yok2');
+            $img2 = Image::find($request->fileID2);
+            $img2->image_for = "product";
+            $img2->save();
         }
 
         $image = $request->file('file3');
-        if ($request->hasFile('file3')) {
+        if ($request->fileID3 == 0) {
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('/uploads/product_images'), $new_name);
+            Image::find($request->ids_2)->delete();
+            $img3 = new Image() ;
+            $img3->path = "/uploads/product_images/" . $new_name;
+            $img3->image_for = "product";
+            $img3->imagetable_type = "App\Models\Product";
+            $img3->imagetable_id = $product->id;
 
-            $img = Image::find($request->fileID3);
-            $img->path = "/uploads/product_images/" . $new_name;
-            $img->image_for = "product";
-            $img->imagetable_type = "App\Models\Product";
-            $img->imagetable_id = $product->id;
-
-
-
-            $img->save();
+            $img3->save();
             return response()->json($product);
         } else {
-            $product->save();
-            return response()->json('photo yok3');
+            $img3 = Image::find($request->fileID3);
+            $img3->image_for = "product";
+            $img3->save();
         }
+
     }
 
     /**
