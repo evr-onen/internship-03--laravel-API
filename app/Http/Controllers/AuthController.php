@@ -68,11 +68,12 @@ class AuthController extends Controller
             'user_spec' => 2,
             'store_id'  =>  $tmp->sender_id,
             ]);
+            $worker->save();
             return $worker;
         }else{
             $worker->store_id = $tmp->sender_id;
             $worker->user_spec = '2';
-            $worker->Save();
+            $worker->save();
             return $worker;
 
         }
@@ -98,7 +99,7 @@ class AuthController extends Controller
             'user_spec' => 3,
             'store_id'  => 0,
         ]);
-
+        $user->save();
 
         return   $user;
     }
@@ -111,7 +112,7 @@ class AuthController extends Controller
     {
 
         $credentials = request(['email', 'password']);
-        return auth();
+        // return auth();
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

@@ -1,3 +1,3 @@
+qweq
 
-
-<a href={{$hashmail}}>tıkla!!</a>
+<a href="{{$array['hashmail']}}">tıkla!!</a>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Worker;
 use Illuminate\Support\Facades\Hash;
 use App\Models\tmpWorkerApp;
 use Illuminate\Http\Request;
@@ -46,21 +47,22 @@ class TmpWorkerAppController extends Controller
         $createApp = new tmpWorkerApp();
 
         $createApp->sender_id = $request->sender_id;
-        $createApp->user_mail = $request->user_mail;
+        $createApp->user_id = $request->user_mail;
         $createApp->status = 1;
         $createApp->hash = rand();
         $createApp->save();
 
-        $email = $request->user_mail;
+        $email = $request->user_id;
 
         $array = [
-            'hashmail' => "https://localhost:3000/register-user?key=" . $createApp->hash
+            'hashmail' => "localhost:3000/register-user?key=" . $createApp->hash
         ];
+        Mail::to($request->user_mail)->send(new Worker($array));
 
-        Mail::send('mail', $array, function ($message) use ($email) {
-            $message->subject('worker Application');
-            $message->to($email);
-        });
+        // Mail::send('mail', $array, function ($message) use ($email) {
+        //     $message->subject('worker Application');
+        //     $message->to($email);
+        // });
 
 
            return $createApp;

@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class tmpWorkerApp extends Model
 {
     use HasFactory;
-    /* public function user()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'store_id', 'store_id');
-    } */
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
