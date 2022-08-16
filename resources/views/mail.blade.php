@@ -1,3 +1,3 @@
 
 
-<a href={{$hashmail}}>{{$hashmail}}</a>
+<a href={{$hashmail}}>tıkla!!</a>

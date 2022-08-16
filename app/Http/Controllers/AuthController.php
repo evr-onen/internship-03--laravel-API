@@ -34,10 +34,13 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
+
+      if($request->url){
+
         $validator = validator()->make(request()->all(), [
             'name'      => 'required | string',
             'email'     => 'required | email',
-            'password'              => 'required | string | min:6 | confirmed',
+            'password'  => 'required | string | min:6 | confirmed',
 
 
         ]);
@@ -45,35 +48,78 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response($validator->errors());
         }
+
+        $tmp=tmpWorkerApp::where('hash', '=', $request->url)->first();
+        if(!$tmp){
+            return response()->json([
+                'message' => 'wrong parameters'
+            ]);
+        }
+
+
+        $worker=User::where('email', '=', $request->email)->first();
+
+        if(!$worker){
+            $worker= new User([
+            'name'      => request()->get('name'),
+            'email'     => request()->get('email'),
+            'password'  => bcrypt(request()->get('password')),
+            'email'     => request()->get('email'),
+            'user_spec' => 2,
+            'store_id'  =>  $tmp->sender_id,
+            ]);
+            return $worker;
+        }else{
+            $worker->store_id = $tmp->sender_id;
+            $worker->user_spec = '2';
+            $worker->Save();
+            return $worker;
+
+        }
+    }else{
+
+        $validator = validator()->make(request()->all(), [
+            'name'      => 'required | string',
+            'email'     => 'required | email',
+            'password'  => 'required | string | min:6 | confirmed',
+
+
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
         $user = User::create([
             'name'      => request()->get('name'),
             'email'     => request()->get('email'),
             'password'  => bcrypt(request()->get('password')),
             'email'     => request()->get('email'),
-            'user_spec' => !empty(request()->get('user_spec')) ? request()->get('user_spec') : "3",
-            'store_id'  => !empty(request()->get('store_id')) ? request()->get('store_id') : "0",
+            'user_spec' => 3,
+            'store_id'  => 0,
         ]);
+
+
         return   $user;
+    }
+
+
     }
 
 
     public function login()
     {
+
         $credentials = request(['email', 'password']);
-
-        if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized a'], 401);
+        return auth();
+        if (! $token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
-        // $tm = tmpWorkerApp::find(auth()->user()->id)->with('tmp')->get();
-        $tm = User::whereId(auth()->user()->id)->with('tmp')->get();
-        return $this->respondWithToken(['token' => $token,  auth()->user(), 'tm' => $tm]);
+
+        return $this->respondWithToken($token);
     }
 
-    public function tree()
-    {
 
-        return User::whereId(6)->with('tmp')->get();
-    }
 
 
     /**

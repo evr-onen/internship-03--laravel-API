@@ -82,6 +82,6 @@ class User extends Authenticatable implements JWTSubject
     public function tmp()
     {
 
-        return $this->hasOne(tmpWorkerApp::class, 'user_id', 'id');
+        return $this->hasOne(tmpWorkerApp::class, 'store_id', 'store_id');
     }
 }

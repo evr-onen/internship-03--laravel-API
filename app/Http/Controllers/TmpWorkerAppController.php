@@ -41,41 +41,29 @@ class TmpWorkerAppController extends Controller
             return response($validator->errors());
         }
 
-        $user = User::where('email', $request->user_mail)->get();
+
 
         $createApp = new tmpWorkerApp();
 
         $createApp->sender_id = $request->sender_id;
-
-        $createApp->user_id = $user[0]->id;
+        $createApp->user_mail = $request->user_mail;
         $createApp->status = 1;
-
         $createApp->hash = rand();
         $createApp->save();
 
         $email = $request->user_mail;
 
         $array = [
-            'hashmail' => "localhost:3000/" . $createApp->hash
+            'hashmail' => "https://localhost:3000/register-user?key=" . $createApp->hash
         ];
 
         Mail::send('mail', $array, function ($message) use ($email) {
             $message->subject('worker Application');
-            $message->to('evr.onen@gmail.com');
+            $message->to($email);
         });
 
-        // Mail::send('mail.worker',  $array, function ($message) use ($email) {
-        //     $message->to($data['email'])
-        //         ->subject($data['subject']);
-        // });
 
-
-
-
-
-
-
-        return $createApp;
+           return $createApp;
     }
 
     /**
