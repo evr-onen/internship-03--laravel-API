@@ -67,9 +67,11 @@ class StoreProductController extends Controller
      * @param  \App\Models\StoreProduct  $storeProduct
      * @return \Illuminate\Http\Response
      */
-    public function getstoreProducts(StoreProduct $storeProduct)
+    public function getstoreProducts(Request $request )
     {
-        return StoreProduct::with('storeToProduct.images')->get();
+
+        $stores=StoreProduct::with('storeToProduct.images')->where('store_id', $request)->get();
+        return  $stores;
     }
 
     /**
