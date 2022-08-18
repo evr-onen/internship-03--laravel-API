@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StoreProduct;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class StoreProductController extends Controller
@@ -45,7 +46,7 @@ class StoreProductController extends Controller
 
         $storepro->save();
 
-        return StoreProduct::find($storepro->id)->with('storeToProduct.images')->get();
+        return StoreProduct::where('store_id', $storepro->store_id)->with('storeToProduct.images')->get();
     }
 
 
@@ -56,9 +57,15 @@ class StoreProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function getget(Request $request)
     {
-        //
+    //   $tty =  Product::with('productToStore','images')->has('productToStore')->get();
+    //    return $tty;
+
+    $products = Product::with('store')->whereHas('store', function($q){
+
+    })->get();
+    return $products;
     }
 
     /**
@@ -70,7 +77,7 @@ class StoreProductController extends Controller
     public function getstoreProducts(Request $request )
     {
 
-        $stores=StoreProduct::with('storeToProduct.images')->where('store_id', $request)->get();
+        $stores=StoreProduct::with('storeToProduct.images')->where('store_id', $request->store_id)->get();
         return  $stores;
     }
 
@@ -130,4 +137,9 @@ class StoreProductController extends Controller
         $delete = StoreProduct::find($id)->delete();
         return StoreProduct::where('store_id', $item)->with('storeToProduct.images')->get();
     }
+
+
+
+
+
 }

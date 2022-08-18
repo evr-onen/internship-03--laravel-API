@@ -260,7 +260,11 @@ class ProductController extends Controller
             }
             $image->delete();
         }
-
+        
         return  $product->delete();
     }
+
+    public function frontPageProducts(){
+        return $stores=Product::with('productToStore','images')->get();
+     }
 }

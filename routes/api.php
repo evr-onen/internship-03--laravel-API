@@ -75,6 +75,7 @@ Route::group([
     Route::post('/{id}', 'ProductController@update_product');
     Route::get('/all', 'ProductController@get_products');
     Route::delete('/{id}', 'ProductController@destroy_products');
+    Route::get('/products', 'ProductController@frontPageProducts');
 });
 
 Route::group([
@@ -87,6 +88,9 @@ Route::group([
     Route::post('/', 'StoreProductController@create');
     Route::post('/{id}', 'StoreProductController@update');
     Route::get('/all', 'StoreProductController@getstoreProducts');
+
+    Route::get('/alll', 'StoreProductController@getget');
+
     Route::delete('/{id}', 'StoreProductController@destroy');
 });
 

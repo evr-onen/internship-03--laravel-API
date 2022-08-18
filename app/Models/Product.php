@@ -32,9 +32,12 @@ class Product extends Model
         return $this->morphMany(Image::class, 'imagetable');
     }
 
-    public function productToSore()
+    public function store()
     {
-
-        return $this->belongsToMany(StoreProduct::class, "id", "product_id");
+        return $this->belongsToMany(Store::class, "store_products")->withPivot('price','stock')->orderBy('pivot_price');
+    }
+    public function productToStore()
+    {
+        return $this->hasOne(StoreProduct::class)->orderBy('price');
     }
 }
