@@ -76,9 +76,12 @@ class StoreProductController extends Controller
      */
     public function getstoreProducts(Request $request )
     {
+        $products = Product::with('store')->whereHas('store', function($q){
 
-        $stores=StoreProduct::with('storeToProduct.images')->where('store_id', $request->store_id)->get();
-        return  $stores;
+        })->get();
+        return $products;
+       /*  $stores=StoreProduct::with('storeToProduct.images')->where('store_id', $request->store_id)->get();
+        return  $stores; */
     }
 
     /**
