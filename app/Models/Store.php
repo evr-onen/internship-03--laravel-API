@@ -24,7 +24,12 @@ class Store extends Model
         // $this->hasOne(Main::class, 'id', 'main_id');
         return $this->hasOne(User::class, 'store_id', 'id');
     }
-
+public function storeToProducts()
+    {
+        // $this->hasOne(Main::class, 'id', 'main_id');
+        return $this->hasMany(StoreProduct::class, 'store_id', 'id');
+    }
+    
     public function images()
     {
 

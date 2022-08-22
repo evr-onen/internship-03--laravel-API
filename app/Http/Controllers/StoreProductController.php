@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StoreProduct;
+use App\Models\Store;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -46,7 +47,7 @@ class StoreProductController extends Controller
 
         $storepro->save();
 
-        return StoreProduct::where('store_id', $storepro->store_id)->with('storeToProduct.images')->get();
+        return Store::with('storeToUser', 'images', 'storeToProducts.product')->find($storepro->store_id);
     }
 
 
@@ -125,7 +126,7 @@ class StoreProductController extends Controller
         $storepro->save();
 
 
-        return StoreProduct::where('store_id', $storepro->store_id)->with('storeToProduct.images')->get();
+        return Store::with('storeToUser', 'images', 'storeToProducts.product')->find($storepro->store_id);
     }
 
     /**
@@ -138,7 +139,7 @@ class StoreProductController extends Controller
     {
         $item = StoreProduct::find($id)->store_id;
         $delete = StoreProduct::find($id)->delete();
-        return StoreProduct::where('store_id', $item)->with('storeToProduct.images')->get();
+        return  Store::with('storeToUser', 'images', 'storeToProducts.product')->find($id);
     }
 
 

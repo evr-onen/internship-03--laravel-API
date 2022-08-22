@@ -80,7 +80,7 @@ class StoreController extends Controller
 
     public function getsstore($id)
     {
-        $store = Store::with('storeToUser', 'images')->find($id);
+        $store = Store::with('storeToUser', 'images', 'storeToProducts.product')->find($id);
         return $store;
     }
 

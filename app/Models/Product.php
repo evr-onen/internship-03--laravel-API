@@ -36,6 +36,10 @@ class Product extends Model
     {
         return $this->belongsToMany(Store::class, "store_products")->withPivot('price','stock')->orderBy('pivot_price');
     }
+    public function stored()
+    {
+        return $this->belongsToMany(Store::class, "store_id");
+    }
     public function productToStore()
     {
         return $this->hasOne(StoreProduct::class)->orderBy('price');
