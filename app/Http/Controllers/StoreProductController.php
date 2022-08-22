@@ -60,13 +60,12 @@ class StoreProductController extends Controller
      */
     public function getget(Request $request)
     {
-    //   $tty =  Product::with('productToStore','images')->has('productToStore')->get();
-    //    return $tty;
+        //   $tty =  Product::with('productToStore','images')->has('productToStore')->get();
+        //    return $tty;
 
-    $products = Product::with('store')->whereHas('store', function($q){
-
-    })->get();
-    return $products;
+        $products = Product::with('store')->whereHas('store', function ($q) {
+        })->get();
+        return $products;
     }
 
     /**
@@ -75,13 +74,12 @@ class StoreProductController extends Controller
      * @param  \App\Models\StoreProduct  $storeProduct
      * @return \Illuminate\Http\Response
      */
-    public function getstoreProducts(Request $request )
+    public function getstoreProducts(Request $request)
     {
-        $products = Product::with('store')->whereHas('store', function($q){
-
+        $products = Product::with('store')->whereHas('store', function ($q) {
         })->get();
         return $products;
-       /*  $stores=StoreProduct::with('storeToProduct.images')->where('store_id', $request->store_id)->get();
+        /*  $stores=StoreProduct::with('storeToProduct.images')->where('store_id', $request->store_id)->get();
         return  $stores; */
     }
 
@@ -135,15 +133,11 @@ class StoreProductController extends Controller
      * @param  \App\Models\StoreProduct  $storeProduct
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StoreProduct $storeProduct, $id)
+    public function destroy(StoreProduct $storeProduct, $id, Request $req)
     {
-        $item = StoreProduct::find($id)->store_id;
+
+
         $delete = StoreProduct::find($id)->delete();
-        return  Store::with('storeToUser', 'images', 'storeToProducts.product')->find($id);
+        return  Store::with('storeToUser', 'images', 'storeToProducts.product')->find($req->store_id);
     }
-
-
-
-
-
 }
