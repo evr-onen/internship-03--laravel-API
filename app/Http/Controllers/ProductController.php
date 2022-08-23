@@ -271,6 +271,6 @@ class ProductController extends Controller
         return $products;
 
 
-       /*  return $stores=Product::with('productToStore','images')->get(); */
+
      }
 }
