@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
+
+
 use Illuminate\Support\Facades\File;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -264,11 +267,23 @@ class ProductController extends Controller
         return  $product->delete();
     }
 
-    public function frontPageProducts(){
-        $products = Product::with('store', 'images')->whereHas('store', function($q){
+    public function frontPageProducts(Request $request){
+        $r=$request->store;
+        $products = Product::with('store', 'images');
 
-        })->get();
-        return $products;
+        if(isset($request->search)){
+          $products= $products->where('name', 'LIKE', '%'.$request->search.'%');
+        }
+      if(isset($request->cats)){
+          $products= $products->where('cat_id', $request->cats);
+        }
+      if(isset($request->store)){
+          $products= $products->whereHas('store', function($q) use($request){
+
+            $q->where('store_id', $request->store);
+        });
+        }
+        return $products->get()->paginate(1);
 
 
 
