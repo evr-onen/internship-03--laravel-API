@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-
+use Illuminate\Http\Response;
 
 use Illuminate\Support\Facades\File;
 use App\Models\Product;
@@ -271,6 +271,9 @@ class ProductController extends Controller
         $r=$request->store;
         $products = Product::with('store', 'images');
 
+        $obj = new \stdClass();
+
+
         if(isset($request->search)){
           $products= $products->where('name', 'LIKE', '%'.$request->search.'%');
         }
@@ -283,8 +286,26 @@ class ProductController extends Controller
             $q->where('store_id', $request->store);
         });
         }
-        return $products->get()->paginate(1);
+        foreach ($products->get() as $item) {
+            $obj->cats[]=$item->cat_id;
 
+            foreach ($item->store as $store){
+               if(!empty($store)){
+                $obj ->store[]=$store->id;
+
+               }
+            }
+          };
+          $obj->cats=array_unique($obj->cats);
+          $obj ->store=array_unique($obj ->store);
+
+
+    //       $products= array_merge($products->toArray(), $obj->data->toArray());
+    //    return $products->has('store')->get()->paginate(1);
+    $array = json_decode(json_encode($obj), true);
+    $data = array_merge($products->get()->toArray(), $array);
+
+       return $data;
 
 
      }
